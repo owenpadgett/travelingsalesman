@@ -115,8 +115,8 @@ while True:
         print("Shortest distance:", best_distance)
         print("Shortest path travel time:", best_time)
         print("Fastest path:", fastest_path)
-        print("Fastest travel time:", fastest_time)
-        print("Fastest path distance:", fastest_distance)
+        print("Fastest travel time:", fastest_time, fastest_time-best_time)
+        print("Fastest path distance:", fastest_distance, best_distance-fastest_distance)
         
         # Plot the result
         plot_tsp(cities, best_path, fastest_path)
