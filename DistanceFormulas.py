@@ -21,10 +21,9 @@ def path_dist2(path):
     return sum(dist2(path[i], path[i + 1]) for i in range(len(path) - 1))
 
 def dist_matrix2(city_list):
-    """Returns a lower triangular matrix representing the distance between each city.
+    """Returns a symmetric matrix representing the distance between each city.
     Input: List of ordered pairs: list of city coordinates.
-    Output: 2D NumPy Array: Each entry is the distance between the row-th city and the column-th city.
-    *Note that this would yield a symmetric matrix, and so to avoid double-calculation this is simplified to lower triangular."""
+    Output: 2D NumPy Array: Each entry is the distance between the row-th city and the column-th city."""
     n = len(city_list)
     dist_mat_temp = [[0.0 for _ in range(n)] for _ in range(n)]
 
@@ -36,4 +35,5 @@ def dist_matrix2(city_list):
                 pass
             else:
                 dist_matrix[i][j] = dist2(city_list[i], city_list[j])
-
+    
+    return np.add(dist_matrix, dist_matrix.transpose())
