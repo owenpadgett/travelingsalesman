@@ -4,6 +4,8 @@ import CityGeneration as cg
 import itertools
 import PathTools as pt
 
+#pns
+
 def dist2(city1, city2=(0,0)):
     """Euclidean distance or l2 norm between two cities in R^2:
     Input: Ordered pair, with optional second ordered pair: If no second city specified, then distance to origin.

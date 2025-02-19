@@ -1,5 +1,6 @@
 import DistanceFormulas as df
 
+#pns
 
 def pathNorm(path):
     """Returns the non-cyclical path normalized, so that reversed paths are considered equivalent.

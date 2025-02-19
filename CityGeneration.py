@@ -1,6 +1,8 @@
 import random
 import numpy as np
 
+#pns
+
 def generate_cities(num_cities, randomize=True, seed=42):
     """Generate city coordinates."""
     if not randomize:
