@@ -2,34 +2,53 @@ import CityGeneration as cg
 import DistanceFormulas as df
 import ConvexHull as ch
 import matplotlib.pyplot as plt
+import numpy as np
 
-iterations=1000
-n=4
-v=10
-m=0.05
+iterations = 1000
+n = 5
+v = 10
+m = 0.05
 
 def linear_piecewise(t):
-    return v-m*t
+    return v - m * t
 
-plotValues=[0]*n
+# Two lists to track frequencies separately
+same_path_counts = [0] * n  # When shortest and fastest paths are the same
+diff_path_counts = [0] * n  # When shortest and fastest paths are different
 
-for i in range(iterations):
-    cities=cg.generate_cities(n)
-    shortestPath=df.eff_brute_force_shortest_path(cities, df.dist_matrix2(cities))
-    fastestPath=df.eff_brute_force_fastest_path(cities, df.dist_matrix2(cities),linear_piecewise())
+for _ in range(iterations):
+    cities = cg.generate_cities(n)
+    hull_size = len(ch.get_convex_hull(cities))  # Number of sides in convex hull
 
-    if shortestPath[0]!=fastestPath[0]:
-        polygon=len(ch.get_convex_hull(cities))
-        plotValues[polygon-1]+=1
+    shortest_path = df.eff_brute_force_shortest_path(cities, df.dist_matrix2(cities))
+    fastest_path = df.eff_brute_force_fastest_path(cities, df.dist_matrix2(cities), linear_piecewise)
 
-x_values = list(range(1, n + 1))  # Polygon side numbers (1 to n)
-y_values = plotValues  # Accumulated values
+    if shortest_path[0] == fastest_path[0]:
+        same_path_counts[hull_size - 1] += 1
+    else:
+        diff_path_counts[hull_size - 1] += 1
 
-plt.bar(x_values, y_values, color='skyblue', edgecolor='black')  # Create bar chart
+# X-axis values (convex hull sizes)
+x_values = np.arange(1, n + 1)
+
+# Plot stacked bar chart
+plt.bar(x_values, same_path_counts, color='skyblue', edgecolor='black', label="Same Paths")
+plt.bar(x_values, diff_path_counts, color='salmon', edgecolor='black', bottom=same_path_counts, label="Different Paths")
+
+# Labels and formatting
 plt.xlabel("Number of Sides in Convex Hull")
 plt.ylabel("Frequency of Occurrence")
-plt.title("Distribution of Convex Hull Side Counts")
-plt.xticks(x_values)  # Ensure x-axis labels match side numbers
-plt.grid(axis='y', linestyle='--', alpha=0.7)  # Add gridlines for readability
-plt.show()  # Display the graph
+plt.title("Shortest vs Fastest Path Distribution by Convex Hull Size")
+plt.xticks(x_values)  # Ensure x-axis labels match convex hull sizes
+plt.legend()  # Show the legend for color meanings
+plt.grid(axis='y', linestyle='--', alpha=0.7)
 
+plt.show()
+
+shortest_path = df.eff_brute_force_shortest_path(cities, df.dist_matrix2(cities))
+fastest_path = df.eff_brute_force_fastest_path(cities, df.dist_matrix2(cities), linear_piecewise)
+
+print(f"Shortest Path: {shortest_path}")
+print(f"Fastest Path: {fastest_path}")
+if shortest_path[0] == fastest_path[0]:
+    print("The shortest and fastest paths are the same.")
